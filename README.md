@@ -12,7 +12,7 @@
 
 ## Related work
 
-1. The idea of HKT is taken from the paper "Jeremy Yallop, Leo White - Lightweight higher-kinded polymorphism"
+1. The idea of lightweight HKT is taken from the paper "Jeremy Yallop, Leo White - Lightweight higher-kinded polymorphism"
 2. [ArrowKt](https://github.com/arrow-kt/arrow) brings the purely functional constructions like functors, monads, applicative, etc. to Kotlin by following the ideas from the article above. Written in Kotlin
 3. [DataFixerUpper](https://github.com/Mojang/DataFixerUpper) defines the notion of Profunctors and Lenses for the means of data transformation by following the ideas from the article above. Written in Java
 4. [avaj](https://github.com/neshkeev/avaj) Haskell influenced Category Theory patterns implemented in Java. The project defines the notion of the [Continuation](https://github.com/neshkeev/avaj/blob/master/avaj-mtl/src/main/java/com/github/neshkeev/avaj/mtl/ContTKind.java) monad, which opens the possibility to implement [coroutines](https://github.com/neshkeev/avaj/blob/master/avaj-examples/src/main/java/com/github/neshkeev/coroutines/CoroutineTKind.java) in java 8 without bytecode modifications or JNI calls.
