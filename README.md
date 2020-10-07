@@ -8,7 +8,7 @@
 3. [HKT and Functors](src/main/java/org/example/step3/Functors.java) introduces the notion of Lightweight Higher-Kinded polymorphism (aka. Higher-Kinded Types, HKT) and defines the notion of a functor
 4. [Monads](src/main/java/org/example/step4/Monads.java) demonstrates the idea of monads
 5. [Monadic parser combinators](src/main/java/org/example/step5/Parsers.java) defines a set of monadic parser combinators
-6. [Real world parser combinators example](src/main/java/org/example/step6/RealWorldParsers.java) monadic JSON parser that is built from the monadic parser combinators
+6. [Real world parser combinators example](src/main/java/org/example/step6/RealWorldParsers.java) defines a monadic JSON parser that is built from the monadic parser combinators
 
 ## Related work
 
