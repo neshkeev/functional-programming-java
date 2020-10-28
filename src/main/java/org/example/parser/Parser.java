@@ -5,6 +5,7 @@ import org.example.adt.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+// String -> Optional<Result<T, String>>
 public interface Parser<T> extends Function<String, Optional<Parser.Result<T>>> {
     class Result<T> {
         final T value;

@@ -1,4 +1,4 @@
-package org.example.step6;
+package org.example.steps.step7;
 
 import org.example.adt.List;
 import org.example.adt.Optional;
@@ -6,11 +6,13 @@ import org.example.parser.ParserK;
 
 import java.util.function.Supplier;
 
-import static org.example.adt.List.*;
+import static org.example.adt.List.cons;
+import static org.example.adt.List.nil;
 import static org.example.parser.ParserK.*;
 
 class JsonParser {
     public static abstract class Value {
+        private Value() {}
         public static final class String extends Value {
             final java.lang.String value;
             protected String(java.lang.String value) { this.value = value; }
@@ -76,9 +78,10 @@ class JsonParser {
         final ParserK.ParserMonad m = ParserK.ParserMonad.INSTANCE;
         final ParserK<String> integral = m.flatMap(
                 opt(chr('-')),
-                neg -> m.flatMap(many1(digit()),
+                neg -> m.flatMap(
+                many1(digit()),
                 digits -> {
-                    final String num = digits.fold((e, r) -> e + r, "");
+                    final String num = digits.string();
                     return neg.caseOf(
                             () -> m.pure(num),
                             __ -> m.pure("-" + num)
@@ -90,12 +93,12 @@ class JsonParser {
                 chr('.'),
                 comma -> m.flatMap(
                 many1(digit()),
-                digits -> m.pure(digits.fold((e, r) -> e + r, ""))
+                digits -> m.pure(digits.string())
         )));
 
-        return m.flatMap(integral,
-                num -> m.flatMap(decimal,
-                dec -> dec.caseOf(
+        return m.flatMap(
+                integral, num -> m.flatMap(
+                decimal, dec -> dec.caseOf(
                         () -> m.pure(new Value.Number(Long.parseLong(num))),
                         d -> m.pure(new Value.Number(Double.parseDouble(num + d)))
                 )));
@@ -154,6 +157,7 @@ class JsonParser {
     public static ParserK<Value.Object<List<Record>>> object() {
         final ParserK.ParserMonad m = ParserK.ParserMonad.INSTANCE;
 
+        // "name" : value
         final Supplier<ParserK<Record>> attr = () -> m.flatMap(
                 whitespace(), _w1 -> m.flatMap(
                 string(), name -> m.flatMap(
@@ -163,6 +167,7 @@ class JsonParser {
                 value(), value -> m.pure(new Record(name.value, value))
         ))))));
 
+        // "name" : "value", "name" : "value", "name2": "value2"
         final Supplier<ParserK<List<Record>>> attrs = () -> m.flatMap(
                 attr.get(), record -> m.flatMap(
                 many(m.flatMap(
@@ -226,29 +231,23 @@ class JsonParser {
 
 public class RealWorldParsers {
     public static void main(String[] args) {
-        System.out.println(JsonParser.whitespace().parse(" \n \t\t\n d"));
-        System.out.println(JsonParser.whitespace().parse(""));
-        System.out.println(JsonParser.number().parse("-123"));
-        System.out.println(JsonParser.number().parse("-1.2"));
-        System.out.println(JsonParser.number().parse("-0.2"));
-        System.out.println(JsonParser.number().parse("0"));
-        System.out.println(JsonParser.number().parse("-0"));
-        System.out.println(JsonParser.string().parse("\"abc\" "));
-        System.out.println(JsonParser.object().parse("{   \t \n   \t\t\t\n}"));
-        System.out.println(JsonParser.array().parse("[ \"hello\",\"world\"]"));
-        System.out.println(JsonParser.value().parse("[ \t\n     \"hello\"\t      ,    \"world\"    ]"));
-        System.out.println(JsonParser.value().parse("{ " +
-                " \"long\" : 123, " +
-                " \"double\" : 123.04138448, " +
-                " \"string\"      :\n \"string value\", " +
-                " \"false\"      :\n false, " +
-                " \"true\"      :\n true, " +
-                " \"null\"      :\n null, " +
-                " \"array\":\t\n [ \t\n     123\t   ,    \"world\"    , {\"who\": \"World\", \"greet\": \"Hello\", \"how many times\": 5} ]," +
-                " \"empty array\"      :\n [], " +
-                " \"empty object\"      :\n {} " +
+//        System.out.println(JsonParser.whitespace().parse(" \n \t\t\n d"));
+//        System.out.println(JsonParser.whitespace().parse(""));
+//        System.out.println(JsonParser.number().parse("-123"));
+//        System.out.println(JsonParser.number().parse("-1.2"));
+//        System.out.println(JsonParser.number().parse("-0.2"));
+//        System.out.println(JsonParser.number().parse("0"));
+//        System.out.println(JsonParser.number().parse("-0"));
+//        System.out.println(JsonParser.string().parse("\"abc\" "));
+//        System.out.println(JsonParser.object().parse("{   \t \n   \t\t\t\n}"));
+//        System.out.println(JsonParser.array().parse("[ \"hello\",\"world\"]"));
+//        System.out.println(JsonParser.value().parse("[ \t\n     \"hello\"\t      ,    \"world\"    ]"));
+
+        System.out.println(JsonParser.value().parse("{" +
+                "\"greet\": \"hello\"," +
+                "\"what\": [\"world\", \"universe\"]," +
+                "\"now\": true" +
                 "}"));
-        
-        System.out.println(JsonParser.value().parse("INSERT ANY JSON HERE"));
+        System.out.println(JsonParser.value().parse(""));
     }
 }

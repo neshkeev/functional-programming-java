@@ -3,6 +3,10 @@ package org.example.adt;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Optional t = None | Some t
+ * @param <T>
+ */
 public abstract class Optional<T> {
     private Optional() { }
 

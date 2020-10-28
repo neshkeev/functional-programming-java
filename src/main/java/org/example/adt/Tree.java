@@ -3,6 +3,10 @@ package org.example.adt;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Tree t = Leaf | Node (Tree t) t (Tree t)
+ * @param <T>
+ */
 public abstract class Tree<T> {
     private Tree() {}
     public static final class Leaf<T> extends Tree<T> {
@@ -37,6 +41,7 @@ public abstract class Tree<T> {
 
     public <R> R caseOf(
             Supplier<R> leafOp,
+            // Tree -> T -> Tree -> Tree
             Function<Tree<T>, Function<T, Function<Tree<T>, R>>> nodeOp
     ) {
         if (this instanceof Leaf) return leafOp.get();

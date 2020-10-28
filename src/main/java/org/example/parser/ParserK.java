@@ -41,15 +41,15 @@ public class ParserK<T> implements App<ParserK.mu, T> {
     public enum ParserMonad implements MonadPlus<ParserK.mu> {
         INSTANCE;
 
+        // a -> Parser<A>
         @Override
-        public <A> ParserK<A> pure(A a) {
-            return ParserK.of(s -> some(Parser.Result.of(a, s)));
-        }
+        public <A> ParserK<A> pure(A a) { return ParserK.of(s -> some(Parser.Result.of(a, s))); }
 
-        // m (a -> b) -> m a -> m b
+        // Parser<A> -> (A -> Parser<B>) -> Parser<B>
         @Override
         public <A, B> ParserK<B> flatMap(App<ParserK.mu, A> maK, Function<A, App<ParserK.mu, B>> aToMb) {
-            final Parser<A> sToAS = narrow(maK).getDelegate();
+            final ParserK<A> narrow = narrow(maK);
+            final Parser<A> sToAS = narrow.getDelegate();
             final Parser<B> sToBS = s -> sToAS.apply(s).caseOf(
                     () -> none(),
                     result -> result.caseOf(
@@ -98,6 +98,20 @@ public class ParserK<T> implements App<ParserK.mu, T> {
         });
     }
 
+    public static ParserK<Character> digit() {
+        final ParserK.ParserMonad m = ParserK.ParserMonad.INSTANCE;
+        return m.plus(chr('0')
+                , m.plus(chr('1')
+                , m.plus(chr('2')
+                , m.plus(chr('3')
+                , m.plus(chr('4')
+                , m.plus(chr('5')
+                , m.plus(chr('6')
+                , m.plus(chr('7')
+                , m.plus(chr('8')
+                , chr('9'))))))))));
+    }
+
     public static <A> ParserK<List<A>> many(ParserK<A> parser) {
         final ParserK.ParserMonad m = ParserK.ParserMonad.INSTANCE;
         return m.plus(many1(parser), m.pure(nil()));
@@ -109,9 +123,9 @@ public class ParserK<T> implements App<ParserK.mu, T> {
         final BiFunction<A, List<A>, List<A>> cons = List::cons;
         return m.flatMap(m.pure(cons),
                 appender -> m.flatMap(parser,
-                        nextElement -> m.flatMap(many(parser),
-                                rest -> m.pure(appender.apply(nextElement, rest)))
-                ));
+                nextElement -> m.flatMap(many(parser),
+                rest -> m.pure(appender.apply(nextElement, rest)))
+        ));
     }
 
     public static <A> ParserK<List<A>> manyTill(ParserK<A> parser, ParserK<A> end) {
@@ -125,21 +139,6 @@ public class ParserK<T> implements App<ParserK.mu, T> {
         ));
 
         return m.plus(stop, proceed);
-    }
-
-    public static ParserK<Character> digit() {
-        final ParserK.ParserMonad m = ParserK.ParserMonad.INSTANCE;
-        return m.plus(
-                chr('0')
-                , m.plus(chr('1')
-                , m.plus(chr('2')
-                , m.plus(chr('3')
-                , m.plus(chr('4')
-                , m.plus(chr('5')
-                , m.plus(chr('6')
-                , m.plus(chr('7')
-                , m.plus(chr('8')
-                , chr('9'))))))))));
     }
 
     public static <T> ParserK<Optional<T>> opt(ParserK<T> parser) {

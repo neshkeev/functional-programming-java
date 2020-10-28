@@ -1,12 +1,9 @@
 package org.example.kind;
 
 import org.example.adt.Optional;
-import org.example.typeclasses.Functor;
 import org.example.typeclasses.Monad;
 
 import java.util.function.Function;
-
-import static org.example.adt.Optional.some;
 
 public class OptionalK<T> implements App<OptionalK.mu, T> {
     final Optional<T> delegate;
@@ -16,10 +13,10 @@ public class OptionalK<T> implements App<OptionalK.mu, T> {
     }
 
     public OptionalK(T value) {
-        this.delegate = some(value);
+        this.delegate = Optional.some(value);
     }
 
-    public static <T> OptionalK<T> of(T value) {
+    public static <T> OptionalK<T> some(T value) {
         return new OptionalK<>(value);
     }
 
@@ -37,18 +34,20 @@ public class OptionalK<T> implements App<OptionalK.mu, T> {
         return delegate;
     }
 
-    public enum OptionalMonad implements Monad<mu> {
+    public enum OptionalMonad implements Monad<OptionalK.mu> {
         INSTANCE;
 
+        // A -> Optional<A>
         @Override
         public <A> OptionalK<A> pure(A a) {
-            return of(a);
+            return some(a);
         }
 
+        // OptionalK<A> -> (A -> OptionalK<B>) -> OptionalK<B>
         @Override
-        public <A, B> OptionalK<B> flatMap(App<mu, A> maK, Function<A, App<mu, B>> aToMb) {
+        public <A, B> OptionalK<B> flatMap(App<OptionalK.mu, A> maK, Function<A, App<OptionalK.mu, B>> aToMb) {
             final Optional<A> delegate = narrow(maK).getDelegate();
-            final App<mu, B> result = delegate.caseOf(
+            final App<OptionalK.mu, B> result = delegate.caseOf(
                     () -> none(),
                     value -> aToMb.apply(value)
             );

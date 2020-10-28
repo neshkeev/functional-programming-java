@@ -1,11 +1,9 @@
 package org.example.adt;
 
-import org.example.kind.App;
-import org.example.parser.ParserK;
-
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+// List a = Nil | Cons a (List a)
 public abstract class List<T> {
     private List() { }
 

@@ -1,21 +1,24 @@
-package org.example.step2;
+package org.example.steps.step2;
 
-import org.example.adt.*;
+import org.example.adt.Id;
+import org.example.adt.List;
+import org.example.adt.Optional;
+import org.example.adt.Tree;
 
 import java.util.function.Function;
 
-import static org.example.adt.List.*;
-import static org.example.adt.Tree.*;
+import static org.example.adt.List.cons;
+import static org.example.adt.Tree.node;
 
 public class MapperUtil {
     private MapperUtil() {}
     static <T, E> Id<E>       map(Function<T, E> mapper, Id<T> in) {
-        return in.caseOf(mapper.andThen(Id::new));
+        return in.caseOf(mapper.andThen(Id::of));
     }
     static <T, E> Optional<E> map(Function<T, E> mapper, Optional<T> in) {
         return in.caseOf(
                 Optional::none,
-                mapper.andThen(Optional::some)
+                s -> mapper.andThen(Optional::some).apply(s)
         );
     }
     static <T, E> List<E>     map(Function<T, E> mapper, List<T> in) {

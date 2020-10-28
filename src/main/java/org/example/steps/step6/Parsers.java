@@ -1,4 +1,4 @@
-package org.example.step5;
+package org.example.steps.step6;
 
 import org.example.adt.List;
 import org.example.parser.Parser;
@@ -56,11 +56,11 @@ public class Parsers {
         System.out.println(aOrB.apply("CDE"));
         System.out.println(aOrB.apply(""));
 
-        final Parser<List<Character>> many1A = ParserK.many(ParserK.chr('A')).getDelegate();
-        System.out.println(many1A.apply("BB"));
-        System.out.println(many1A.apply("A"));
-        System.out.println(many1A.apply("ABB"));
-        System.out.println(many1A.apply("AABB"));
-        System.out.println(many1A.apply("AABBA"));
+        final Parser<List<Character>> manyA = ParserK.many(ParserK.chr('A')).getDelegate();
+        System.out.println(manyA.apply("BB"));
+        System.out.println(manyA.apply("A"));
+        System.out.println(manyA.apply("ABB"));
+        System.out.println(manyA.apply("AABB"));
+        System.out.println(manyA.apply("AABBA"));
     }
 }

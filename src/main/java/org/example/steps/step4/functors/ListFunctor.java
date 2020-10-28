@@ -1,4 +1,4 @@
-package org.example.step3.functors;
+package org.example.steps.step4.functors;
 
 import org.example.adt.List;
 import org.example.kind.App;
@@ -18,11 +18,10 @@ public enum ListFunctor implements Functor<ListK.mu> {
         return delegate.caseOf(
                 () -> ListK.of(nil()),
                 (head, tail) -> {
-                    final App<ListK.mu, B> app = map(fun, ListK.of(tail));
-
                     final B newHead = fun.apply(head);
-                    final List<B> newTail = ListK.narrow(app).getDelegate();
-                    return ListK.of(newHead, newTail);
+                    final ListK<B> tailK = map(fun, ListK.of(tail));
+
+                    return ListK.of(newHead, tailK.getDelegate());
                 }
         );
     }

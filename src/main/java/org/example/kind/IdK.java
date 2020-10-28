@@ -4,6 +4,7 @@ import org.example.typeclasses.Monad;
 
 import java.util.function.Function;
 
+// F<A> -> App<F, A>
 public class IdK<T> implements App<IdK.mu, T> {
     final T value;
 
@@ -17,6 +18,7 @@ public class IdK<T> implements App<IdK.mu, T> {
 
     public static final class mu { }
 
+    // App<F, A> -> F<A>
     public static <T> IdK<T> narrow(App<mu, T> value) {
         return (IdK<T>) value;
     }

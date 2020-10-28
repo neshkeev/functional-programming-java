@@ -2,7 +2,10 @@ package org.example.adt;
 
 import java.util.function.Function;
 
-// ADT
+/**
+ * Wrapper: Id x = x
+ * @param <T>
+ */
 public class Id<T> {
     final T value;
 
