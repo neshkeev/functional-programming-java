@@ -93,7 +93,7 @@ class JsonParser {
                 chr('.'),
                 comma -> m.flatMap(
                 many1(digit()),
-                digits -> m.pure(digits.string())
+                digits -> m.pure(comma + digits.string())
         )));
 
         return m.flatMap(
@@ -167,7 +167,7 @@ class JsonParser {
                 value(), value -> m.pure(new Record(name.value, value))
         ))))));
 
-        // "name" : "value", "name" : "value", "name2": "value2"
+        // "name" : value, "name1" : value1, "name2": value2
         final Supplier<ParserK<List<Record>>> attrs = () -> m.flatMap(
                 attr.get(), record -> m.flatMap(
                 many(m.flatMap(
