@@ -3,11 +3,11 @@
 ## Contents
 
 0. [Closure](src/main/java/org/example/steps/step0/Closure.java) is a reminder for the idea of closures, which is a corner stone for monadic computations
-1. [ADT and Pattern Matching](src/main/java/org/example/steps/step1/Adt.java) demonstrates how to define Algebraic Data Types (ADT) and pattern matching over them
-2. [Mapper over ADTs](src/main/java/org/example/steps/step2/PatternMatching.java) demonstrates a naive approach to define a set of mappers over ADTs
-3. [HKT and Functors](src/main/java/org/example/steps/step3/LightweightHKT.java) introduces the notion of Lightweight Higher-Kinded polymorphism (aka. Higher-Kinded Types, HKT)
-4. [Monads](src/main/java/org/example/steps/step4/Functors.java) defines the notion of a functor
-5. [Monadic parser combinators](src/main/java/org/example/steps/step5/Monads.java) demonstrates the idea of monads
+1. [Algebraic data structures](src/main/java/org/example/steps/step1/Adt.java) demonstrates how to define Algebraic Data Types (ADT)
+2. [Pattern matching](src/main/java/org/example/steps/step2/PatternMatching.java) pattern matching over ADT
+3. [Lightweight HKT](src/main/java/org/example/steps/step3/LightweightHKT.java) introduces the notion of Lightweight Higher-Kinded polymorphism (aka. Higher-Kinded Types, HKT)
+4. [Functors](src/main/java/org/example/steps/step4/Functors.java) defines the notion of a functor
+5. [Monads](src/main/java/org/example/steps/step5/Monads.java) demonstrates the idea of monads
 6. [Monadic parser combinators](src/main/java/org/example/steps/step6/Parsers.java) defines a set of monadic parser combinators
 7. [Real world parser combinators example](src/main/java/org/example/steps/step7/RealWorldParsers.java) defines a monadic JSON parser that is built from the monadic parser combinators
 
